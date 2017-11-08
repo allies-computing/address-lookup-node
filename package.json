@@ -1,0 +1,9 @@
+{
+    "name": "allies-address-lookup-example",
+    "author": "Stephen Keable from Allies Computing",
+    "description" : "Simple demo to search for addresses via our API on form submit and returns the full address.",
+    "version": "0.0.1",
+    "dependencies": {
+        "request": "^2.81.0"
+    }
+}
