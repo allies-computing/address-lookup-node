@@ -16,7 +16,7 @@ var address_input = process.argv[2] || "";
 var country = process.argv[3] || "GB";
 var page = process.argv[4] || 0;
     
-// Replace with your API key, test key will always return true regardless of email address
+// Replace with your API key, test key is locked to NR14 7PZ postcode search
 var api_key = "PCW45-12345-12345-1234X";
 
 // Grab the input text and trim any whitespace
@@ -34,7 +34,7 @@ if (address_input == "") {
 
 } else {
 
-    // Create the URL to API including API key and encoded email address
+    // Create the URL to API including API key and encoded search term
     var address_url = "https://ws.postcoder.com/pcw/" + api_key + "/address/" + country + "/" + encodeURIComponent(address_input) + "?page=" + page;
 
     // Call the API
@@ -45,7 +45,7 @@ if (address_input == "") {
             // Convert response into a JSON object
             var address_response = JSON.parse(body);
             
-            // Check for alternative email address suggestion
+            // Check that with some address results
             if (address_response.length > 0) {
                 
                 var last_address = address_response[address_response.length - 1];
@@ -63,7 +63,7 @@ if (address_input == "") {
                 output.current_page = parseInt(page);
                 output.addresses = address_response;
 
-                // Full list of "state" responses - https://developers.alliescomputing.com/postcoder-web-api/address-lookup
+                // Full list of responses fields - https://developers.alliescomputing.com/postcoder-web-api/address-lookup
                 
             } else {
                 
