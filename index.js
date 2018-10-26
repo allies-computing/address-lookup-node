@@ -9,21 +9,21 @@
 */
 
 // Using a simplified HTTP client from NPM - https://github.com/request/request
-var request = require('request');
+const request = require("request");
 
 // Going to grab the arg from the command line arguments for this example
-var address_input = process.argv[2] || "";
-var country = process.argv[3] || "GB";
-var page = process.argv[4] || 0;
-    
+let address_input = process.argv[2] || "";
+let country = process.argv[3] || "GB";
+let page = process.argv[4] || 0;
+
 // Replace with your API key, test key is locked to NR14 7PZ postcode search
-var api_key = "PCW45-12345-12345-1234X";
+const api_key = "PCW45-12345-12345-1234X";
 
 // Grab the input text and trim any whitespace
 address_input = address_input.trim() || "";
 
 // Create an empty output object
-var output = new Object;
+const output = new Object;
 
 if (address_input == "") {
 
@@ -35,47 +35,47 @@ if (address_input == "") {
 } else {
 
     // Create the URL to API including API key and encoded search term
-    var address_url = "https://ws.postcoder.com/pcw/" + api_key + "/address/" + country + "/" + encodeURIComponent(address_input) + "?page=" + page;
+    const address_url = `https://ws.postcoder.com/pcw/${api_key}/address/${country}/${encodeURIComponent(address_input)}?page=${page}`;
 
     // Call the API
-    request(address_url, function (error, response, body) {
+    request(address_url, (error, response, body) => {
 
         if (!error && response.statusCode == 200) {
 
             // Convert response into a JSON object
-            var address_response = JSON.parse(body);
-            
+            const address_response = JSON.parse(body);
+
             // Check that with some address results
             if (address_response.length > 0) {
-                
-                var last_address = address_response[address_response.length - 1];
-                
+
+                const last_address = address_response[address_response.length - 1];
+
                 if(last_address.morevalues) {
-                    
+
                     output.next_page = parseInt(last_address.nextpage);
                     output.num_of_addresses = parseInt(last_address.totalresults);
-                    
+
                 } else {
-                    
+
                     output.num_of_addresses = address_response.length;
                 }
-                    
+
                 output.current_page = parseInt(page);
                 output.addresses = address_response;
 
                 // Full list of responses fields - https://developers.alliescomputing.com/postcoder-web-api/address-lookup
-                
+
             } else {
-                
+
                 output.error_message = "No address found";
-                
-            } 
+
+            }
 
             console.log(output);
 
         } else {
 
-            output.error_message = "An error occurred" + response.statusCode;
+            output.error_message = `An error occurred: ${response.statusCode}`;
 
             console.log(output);
 
